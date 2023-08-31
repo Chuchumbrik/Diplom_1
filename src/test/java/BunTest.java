@@ -24,6 +24,7 @@ public class BunTest {
                 {"0987654321", Float.MAX_VALUE},
                 {")(*&^%$#@!", 11.7f},
                 {"", 0},
+                {" ", 12},
                 {null, -1}
         };
     }

@@ -26,14 +26,10 @@ public class IngredientTest {
     @Parameterized.Parameters(name = "Вариант: {0} {1}")
     public static Object[][] getData() {
         return new Object[][]{
-                {SAUCE, "Spicy-X", 1},
-                {SAUCE, "Space Sauce", 2},
-                {SAUCE, "Традиционный галактический", 3},
-                {SAUCE, "Соус с шипами Антарианского плоскоходца", 4},
-                {FILLING, "Мясо бессмертных моллюсков Protostomia", 1},
-                {FILLING, "Говяжий метеорит (отбивная)", 2},
-                {FILLING, "Плоды Фалленианского дерева", 3},
-                {FILLING, "Сыр с астероидной плесенью", 4}
+                {SAUCE, "SAUCE - Spicy-X", 1},
+                {SAUCE, "SAUCE - Space Sauce", 2.05F},
+                {FILLING, "FILLING - Мясо бессмертных моллюсков Protostomia", 1},
+                {FILLING, "FILLING - Говяжий метеорит (отбивная)", 1.25F},
         };
     }
 

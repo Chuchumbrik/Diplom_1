@@ -8,103 +8,107 @@ import praktikum.Burger;
 import praktikum.Ingredient;
 import praktikum.IngredientType;
 import org.mockito.MockitoAnnotations;
-
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BurgerTest {
-
+    private final String bunName = "Corn";
+    private final String sauceName = "Tobasko";
+    private final String fillingName = "Chicken";
+    private final float bunPrice = 1.5f;
+    private final float saucePrice = 0.3f;
+    private final float fillingPrice = 2.99f;
+    private final float burgerPrice = (bunPrice * 2) + saucePrice + fillingPrice;
     private Burger burger;
     @Mock
-    private Bun bunMock;
+    private Bun bun;
     @Mock
-    private Ingredient SauceMock;
+    private Ingredient sauce;
     @Mock
-    private Ingredient FillingMock;
+    private Ingredient filling;
 
     @Before
     public void start() {
         MockitoAnnotations.initMocks(this);
-        when(bunMock.getName()).thenReturn("step");
-        when(bunMock.getPrice()).thenReturn(1f);
-        when(SauceMock.getType()).thenReturn(IngredientType.SAUCE);
-        when(SauceMock.getName()).thenReturn("hot");
-        when(SauceMock.getPrice()).thenReturn(2f);
-        when(FillingMock.getType()).thenReturn(IngredientType.FILLING);
-        when(FillingMock.getName()).thenReturn("cutlet");
-        when(FillingMock.getPrice()).thenReturn(3f);
+        when(bun.getName()).thenReturn(bunName);
+        when(bun.getPrice()).thenReturn(bunPrice);
+        when(sauce.getType()).thenReturn(IngredientType.SAUCE);
+        when(sauce.getName()).thenReturn(sauceName);
+        when(sauce.getPrice()).thenReturn(saucePrice);
+        when(filling.getType()).thenReturn(IngredientType.FILLING);
+        when(filling.getName()).thenReturn(fillingName);
+        when(filling.getPrice()).thenReturn(fillingPrice);
         burger = new Burger();
-        burger.setBuns(bunMock);
-        burger.setBuns(bunMock);
-        burger.addIngredient(SauceMock);
-        burger.addIngredient(FillingMock);
+        burger.setBuns(bun);
+        burger.addIngredient(sauce);
+        burger.addIngredient(filling);
     }
 
     @Test
-    public void testGetPrice() {
-        assertEquals(7f, burger.getPrice(), 0.01);
+    public void getPriceTest() {
+        assertEquals(burgerPrice, burger.getPrice(), 0);
     }
 
     @Test
-    public void testGetRecipe() {
-        String expectedReceipt = String.format(
-                "(==== step ====)%n" +
-                        "= sauce hot =%n" +
-                        "= filling cutlet =%n" +
-                        "(==== step ====)%n" +
-                        "%nPrice: 7,000000%n");
+    public void getRecipeTest() {
+        String receiptText = String.format(
+                "(==== %s ====)%n" +
+                        "= sauce %s =%n" +
+                        "= filling %s =%n" +
+                        "(==== %s ====)%n" +
+                        "%nPrice: %f%n",bunName,sauceName,fillingName,bunName, burgerPrice);
 
-        assertEquals(expectedReceipt, burger.getReceipt());
+        assertEquals(receiptText, burger.getReceipt());
     }
 
     @Test
-    public void testSetBuns() {
-        burger.setBuns(bunMock);
-        assertEquals(bunMock, burger.bun);
+    public void setBunsTest() {
+        burger.setBuns(bun);
+        assertEquals(bun, burger.bun);
     }
     @Test
-    public void testAddIngredient() {
-        burger.addIngredient(SauceMock);
-        burger.addIngredient(FillingMock);
+    public void addIngredientTest() {
+        burger.addIngredient(sauce);
+        burger.addIngredient(filling);
 
-        String expectedReceipt = String.format(
-                "(==== step ====)%n" +
-                        "= sauce hot =%n" +
-                        "= filling cutlet =%n" +
-                        "= sauce hot =%n" +
-                        "= filling cutlet =%n" +
-                        "(==== step ====)%n" +
+        String receiptText = String.format(
+                "(==== %s ====)%n" +
+                        "= sauce %s =%n" +
+                        "= filling %s =%n" +
+                        "= sauce %s =%n" +
+                        "= filling %s =%n" +
+                        "(==== %s ====)%n" +
                         "%n" +
-                        "Price: 12,000000%n");
+                        "Price: %f%n",bunName,sauceName,fillingName,sauceName,fillingName,bunName, burgerPrice + saucePrice + fillingPrice);
 
-        assertEquals(expectedReceipt, burger.getReceipt());
+        assertEquals(receiptText, burger.getReceipt());
     }
     @Test
-    public void testMoveIngredient() {
+    public void moveIngredientTest() {
         burger.moveIngredient(0, 1);
 
-        String expectedReceipt = String.format(
-                "(==== step ====)%n" +
-                        "= filling cutlet =%n" +
-                        "= sauce hot =%n" +
-                        "(==== step ====)%n" +
+        String receiptText = String.format(
+                "(==== %s ====)%n" +
+                        "= filling %s =%n" +
+                        "= sauce %s =%n" +
+                        "(==== %s ====)%n" +
                         "%n" +
-                        "Price: 7,000000%n");
+                        "Price: %f%n",bunName,fillingName,sauceName,bunName, burgerPrice);
 
-        assertEquals(expectedReceipt, burger.getReceipt());
+        assertEquals(receiptText, burger.getReceipt());
     }
     @Test
-    public void testRemoveIngredient() {
+    public void removeIngredientTest() {
         burger.removeIngredient(1);
         burger.removeIngredient(0);
 
-        String expectedReceipt = String.format(
-                "(==== step ====)%n" +
-                        "(==== step ====)%n" +
+        String receiptText = String.format(
+                "(==== %s ====)%n" +
+                        "(==== %s ====)%n" +
                         "%n" +
-                        "Price: 2,000000%n");
+                        "Price: %f%n",bunName,bunName, burgerPrice - saucePrice - fillingPrice);
 
-        assertEquals(expectedReceipt, burger.getReceipt());
+        assertEquals(receiptText, burger.getReceipt());
     }
 }
